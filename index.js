@@ -19,8 +19,8 @@ function captain(shipitConfig, options, cb) {
   // Optional args
   cb = _.isFunction(cb) ? cb : function() {};
   if (_.isFunction(options)) {
-    options = {};
     cb = options;
+    options = {};
   }
 
   // Normalize tasks from argv
@@ -31,33 +31,35 @@ function captain(shipitConfig, options, cb) {
     targetEnv: argv['env'] || false,
     availableEnvs: _.without(Object.keys(shipitConfig), 'default'),
     tasks: argvTasks,
+    logItems: function(options, shipit) {
+      return {
+        'Environment': options.targetEnv,
+        'Branch': shipit.config.branch,
+        'Path': shipit.config.deployTo,
+      };
+    },
     init: function(shipit) {
-      // automatically call initconfig?
-      return shipit.initConfig(shipitConfig);
+      require('shipit-deploy')(shipit);
+      return shipit;
     }
   });
 
   var confirmPrompt = function confirmPrompt(options, shipit) {
-    var msg = [
-      chalk.bold('- Tasks: %s'),
-      chalk.bold('- Environment: %s'),
-      chalk.bold('- Branch: %s'),
-      chalk.bold('- Path: %s'),
-    ];
+    if (options.logItems) {
+      var logItems = options.logItems(options, shipit);
+      var msg = Object.keys(logItems).map(function(key) {
+        return chalk.bold(util.format('- %s: %s', key, chalk.blue(logItems[key])));
+      });
 
-    console.log(util.format(
-      '\n' + msg.join('\n') + '\n',
-      chalk.blue(options.tasks.join(', ')),
-      chalk.blue(options.targetEnv),
-      chalk.blue(shipit.config.branch),
-      chalk.blue(shipit.config.deployTo)
-    ));
+      console.log('\n' + msg.join('\n') + '\n');
+    }
+    var taskStr = chalk.cyan(options.tasks.join(chalk.white(', ')));
 
     return inquirer.prompt([{
       type: 'confirm',
       name: 'taskConfirm',
       default: true,
-      message: 'Proceed with task?',
+      message: util.format('Proceed with tasks [%s]', taskStr),
     }]).then(function(answers) {
 
       return new Promise(function(resolve, reject) {
@@ -90,7 +92,11 @@ function captain(shipitConfig, options, cb) {
     shipit = new Shipit({environment: options.targetEnv});
 
     if (_.isFunction(options.init)) {
-      options.init(shipit);
+      shipit = options.init(shipit);
+
+      if (!shipit.config) {
+        shipit = shipit.initConfig(shipitConfig);
+      }
     }
 
     return confirmPrompt(options, shipit);
