@@ -37,8 +37,9 @@ function captain(shipitConfig, options, cb) {
     }
   });
 
-  var confirmPrompt = function confirmPrompt(targetEnv, shipit) {
+  var confirmPrompt = function confirmPrompt(options, shipit) {
     var msg = [
+      chalk.bold('- Tasks: %s'),
       chalk.bold('- Environment: %s'),
       chalk.bold('- Branch: %s'),
       chalk.bold('- Path: %s'),
@@ -46,7 +47,8 @@ function captain(shipitConfig, options, cb) {
 
     console.log(util.format(
       '\n' + msg.join('\n') + '\n',
-      chalk.blue(targetEnv),
+      chalk.blue(options.tasks.join(', ')),
+      chalk.blue(options.targetEnv),
       chalk.blue(shipit.config.branch),
       chalk.blue(shipit.config.deployTo)
     ));
@@ -68,30 +70,30 @@ function captain(shipitConfig, options, cb) {
     });
   };
 
-  var envPrompt = function envPrompt(targetEnv, availableEnvs) {
-    if (!targetEnv && availableEnvs.length > 1) {
+  var envPrompt = function envPrompt(options) {
+    if (!options.targetEnv && options.availableEnvs.length > 1) {
       return inquirer.prompt([{
         type: 'list',
         name: 'targetEnv',
-        default: targetEnv,
+        default: options.targetEnv,
         message: 'Target environment:',
-        choices: availableEnvs
+        choices: options.availableEnvs
       }])
     }
 
-    return Promise.resolve({targetEnv: targetEnv || availableEnvs[0]});
+    return Promise.resolve({targetEnv: options.targetEnv || options.availableEnvs[0]});
   };
 
-  return envPrompt(options.targetEnv, options.availableEnvs)
+  return envPrompt(options)
   .then(function(answers) {
-    targetEnv = answers.targetEnv;
-    shipit = new Shipit({environment: targetEnv});
+    options.targetEnv = answers.targetEnv;
+    shipit = new Shipit({environment: options.targetEnv});
 
     if (_.isFunction(options.init)) {
       options.init(shipit);
     }
 
-    return confirmPrompt(targetEnv, shipit);
+    return confirmPrompt(options, shipit);
   }).then(function(shipit) {
     shipit.initialize();
     shipit.start(options.tasks, function() {
