@@ -80,7 +80,7 @@ gulp.task('deploy', function(cb) {
 
 ## API
 
-### captain(shipitConfig, [options], [cb])
+### captain(shipitConfig [, options, cb])
 
 ------
 
