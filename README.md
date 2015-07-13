@@ -1,5 +1,5 @@
 # shipit-captain 
-> Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguements](https://github.com/bcoe/yargs), customized logging, and more.
+> Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguments](https://github.com/bcoe/yargs), customized logging, and more.
 
 ## Why?
 Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into our existing task workflow, be it Gulp, Grunt, or anything else.
@@ -156,7 +156,7 @@ You **do not** need to call `shipit.initConfig`. It will be called automatically
 
 ```js
 var options = {
-  init: function(shipit) {
+  init: function(gshipit) {
     require('shipit-deploy')(shipit);
     require('shipit-shared')(shipit);
   }
