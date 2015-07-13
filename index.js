@@ -6,14 +6,15 @@ var util = require('util');
 var yargs = require('yargs');
 
 function captain(shipitConfig, options, cb) {
-  var argv = yargs.option('target', {
-    alias: 't',
-  }).argv;
-  var targetEnv = argv['target'] || false;
-  var availableEnvs = _.without(Object.keys(shipitConfig), 'default');
   var shipit;
-
-  console.log(yargs.argv);
+  var argv = yargs.options({
+    'e': {
+      alias: 'env'
+    },
+    't': {
+      alias: 'tasks'
+    }
+  }).argv;
 
   // Optional args
   cb = _.isFunction(cb) ? cb : function() {};
@@ -22,8 +23,16 @@ function captain(shipitConfig, options, cb) {
     cb = options;
   }
 
+  // Normalize tasks from argv
+  var argvTasks = argv['tasks'] || 'deploy';
+  argvTasks = argvTasks.split(',').map(Function.prototype.call, String.prototype.trim);
+
   options = _.defaults(options || {}, {
+    targetEnv: argv['env'] || false,
+    availableEnvs: _.without(Object.keys(shipitConfig), 'default'),
+    tasks: argvTasks,
     init: function(shipit) {
+      // automatically call initconfig?
       return shipit.initConfig(shipitConfig);
     }
   });
@@ -54,13 +63,13 @@ function captain(shipitConfig, options, cb) {
           return resolve(shipit);
         }
 
-        return reject('Shipit aborted');
+        return reject('Shipit process aborted.');
       });
     });
   };
 
   var envPrompt = function envPrompt(targetEnv, availableEnvs) {
-    if (availableEnvs.length > 1) {
+    if (!targetEnv && availableEnvs.length > 1) {
       return inquirer.prompt([{
         type: 'list',
         name: 'targetEnv',
@@ -70,10 +79,10 @@ function captain(shipitConfig, options, cb) {
       }])
     }
 
-    return Promise.resolve({targetEnv: availableEnvs[0]});
+    return Promise.resolve({targetEnv: targetEnv || availableEnvs[0]});
   };
 
-  return envPrompt(targetEnv, availableEnvs)
+  return envPrompt(options.targetEnv, options.availableEnvs)
   .then(function(answers) {
     targetEnv = answers.targetEnv;
     shipit = new Shipit({environment: targetEnv});
@@ -85,12 +94,12 @@ function captain(shipitConfig, options, cb) {
     return confirmPrompt(targetEnv, shipit);
   }).then(function(shipit) {
     shipit.initialize();
-    shipit.start('deploy', function() {
+    shipit.start(options.tasks, function() {
       cb();
       return Promise.resolve(shipit);
     });
   }).catch(function(e) {
-    console.log(chalk.red('Shipit process aborted.'));
+    console.log(chalk.red(e));
   });
 }
 
