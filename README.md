@@ -1,6 +1,8 @@
 # shipit-captain 
 > Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguments](https://github.com/bcoe/yargs), customized logging, and more.
 
+![shipit-captain demo](docs/demo.gif)
+
 ## Why?
 Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into our existing task workflow, be it Gulp, Grunt, or anything else.
 
