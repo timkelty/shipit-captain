@@ -40,7 +40,6 @@ function captain(shipitConfig, options, cb) {
     },
     init: function(shipit) {
       require('shipit-deploy')(shipit);
-      return shipit;
     }
   });
 
@@ -92,10 +91,10 @@ function captain(shipitConfig, options, cb) {
     shipit = new Shipit({environment: options.targetEnv});
 
     if (_.isFunction(options.init)) {
-      shipit = options.init(shipit);
+      options.init(shipit);
 
       if (!shipit.config) {
-        shipit = shipit.initConfig(shipitConfig);
+        shipit.initConfig(shipitConfig);
       }
     }
 
