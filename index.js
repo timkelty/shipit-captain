@@ -5,18 +5,28 @@ var chalk = require('chalk');
 var util = require('util');
 var yargs = require('yargs');
 
-function captain(shipitConfig, options) {
+function captain(shipitConfig, options, cb) {
   var argv = yargs.option('target', {
     alias: 't',
   }).argv;
   var targetEnv = argv['target'] || false;
+  var availableEnvs = _.without(Object.keys(shipitConfig), 'default');
   var shipit;
-  var options = _.defaults(options || {}, {
+
+  console.log(yargs.argv);
+
+  // Optional args
+  cb = _.isFunction(cb) ? cb : function() {};
+  if (_.isFunction(options)) {
+    options = {};
+    cb = options;
+  }
+
+  options = _.defaults(options || {}, {
     init: function(shipit) {
       return shipit.initConfig(shipitConfig);
     }
   });
-  var availableEnvs = _.without(Object.keys(shipitConfig), 'default');
 
   var confirmPrompt = function confirmPrompt(targetEnv, shipit) {
     var msg = [
@@ -25,12 +35,28 @@ function captain(shipitConfig, options) {
       chalk.bold('- Path: %s'),
     ];
 
-    return util.format(
+    console.log(util.format(
       '\n' + msg.join('\n') + '\n',
       chalk.blue(targetEnv),
       chalk.blue(shipit.config.branch),
       chalk.blue(shipit.config.deployTo)
-    );
+    ));
+
+    return inquirer.prompt([{
+      type: 'confirm',
+      name: 'taskConfirm',
+      default: true,
+      message: 'Proceed with task?',
+    }]).then(function(answers) {
+
+      return new Promise(function(resolve, reject) {
+        if (answers.taskConfirm) {
+          return resolve(shipit);
+        }
+
+        return reject('Shipit aborted');
+      });
+    });
   };
 
   var envPrompt = function envPrompt(targetEnv, availableEnvs) {
@@ -52,23 +78,19 @@ function captain(shipitConfig, options) {
     targetEnv = answers.targetEnv;
     shipit = new Shipit({environment: targetEnv});
 
-    // TODO: check that options.init must be a fn
-    options.init(shipit);
+    if (_.isFunction(options.init)) {
+      options.init(shipit);
+    }
 
-    // Log details with confirmation
-    console.log(confirmPrompt(targetEnv, shipit));
-
-    return inquirer.prompt([{
-      type: 'confirm',
-      name: 'deployConfirm',
-      default: true,
-      message: 'Proceed with deploy?',
-    }]).then(function(answers) {
-      if (answers.deployConfirm) {
-        shipit.initialize();
-        shipit.start('deploy');
-      }
+    return confirmPrompt(targetEnv, shipit);
+  }).then(function(shipit) {
+    shipit.initialize();
+    shipit.start('deploy', function() {
+      cb();
+      return Promise.resolve(shipit);
     });
+  }).catch(function(e) {
+    console.log(chalk.red('Shipit process aborted.'));
   });
 }
 
