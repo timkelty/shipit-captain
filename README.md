@@ -156,7 +156,7 @@ You **do not** need to call `shipit.initConfig`. It will be called automatically
 
 ```js
 var options = {
-  init: function(options, shipit) {
+  init: function(shipit) {
     require('shipit-deploy')(shipit);
     require('shipit-shared')(shipit);
   }
