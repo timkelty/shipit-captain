@@ -42,7 +42,7 @@ var config: {
   }
 };
 module.exports.config = config;
-module.exports.initConfig = function(shipit) {
+module.exports.init = function(shipit) {
   require('shipit-shared')(shipit);
   shipit.initConfig(config);
 }
