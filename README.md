@@ -58,7 +58,7 @@ gulp.task('shipit', function(cb) {
   shipitCaptain(shipitConfig, cb);
 });
 
-// Run other after shipit tasks are completed 
+// Callback, after shipit tasks are completed 
 gulp.task('myTask', ['shipit'], function(cb) {
   console.log('Shipit tasks are done!');
   cb();
@@ -123,6 +123,8 @@ gulp shipit --tasks deploy,myOtherTask
 ------
 
 #### options.logItems
+
+> Items to be logged to console just before confirmation prompt. Intended to be used as a quick review of task details.
 
 `{function} [options.logItems(options, shipit)]`
 
