@@ -75,7 +75,7 @@ var options = {
 gulp.task('deploy', function(cb) {
   shipitCaptain(shipitConfig, options, cb);
 });
-// 
+
 
 ```
 
