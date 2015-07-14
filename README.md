@@ -128,6 +128,8 @@ gulp shipit --tasks deploy,myOtherTask
 
 `{function} [options.logItems(options, shipit)]`
 
+![logItems example](docs/demo-log.png)
+
 ##### Gulp example:
 
 ```js
