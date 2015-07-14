@@ -1,12 +1,10 @@
 # shipit-captain 
-> Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, CLI arguments (via [Yargs](https://github.com/bcoe/yargs)), customized logging, and more.
-
-![shipit-captain demo](docs/demo.gif)
+> Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguements](https://github.com/bcoe/yargs), customized logging, and more.
 
 ## Why?
-Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into an existing task workflow, using Gulp, Grunt, or anything else.
+Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into our existing task workflow, be it Gulp, Grunt, or anything else.
 
-Using `shipit-captain` will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
+Using shipit-captain will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
 
 ## Install
 
@@ -16,7 +14,7 @@ $ npm install --save shipit-captain
 
 ## Usage
 
-You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as those intended for `shipit-captain`. The only requirement is you must separate your `shipit.config` exports.
+You can organize your config files any way you like. Below is my preference, as it still allows shipit-cli commands to work, as well as shipit-captain. The only requirment is you must separate your `shipit.config` exports.
 
 ### Example `shipitfile.js`
 ```js
@@ -42,7 +40,7 @@ var config: {
   }
 };
 module.exports.config = config;
-module.exports.init = function(shipit) {
+module.exports.initConfig = function(shipit) {
   require('shipit-shared')(shipit);
   shipit.initConfig(config);
 }
@@ -50,16 +48,15 @@ module.exports.init = function(shipit) {
 
 ### Example `gulpfile.js`
 ```js
-var gulp = require('gulp');
+var gulp   = require('gulp');
 var shipitCaptain = require('shipit-captain');
-var shipitConfig = require('./config/shipit').config;
 
 // With no options, will run shipit-deploy task by default.
 gulp.task('shipit', function(cb) {
   shipitCaptain(shipitConfig, cb);
 });
 
-// Callback, after shipit tasks are completed 
+// Run other after shipit tasks are completed 
 gulp.task('myTask', ['shipit'], function(cb) {
   console.log('Shipit tasks are done!');
   cb();
@@ -75,13 +72,13 @@ var options = {
 gulp.task('deploy', function(cb) {
   shipitCaptain(shipitConfig, options, cb);
 });
-
+// 
 
 ```
 
 ## API
 
-### captain(shipitConfig [, options, cb])
+### captain(shipitConfig, [options], [cb])
 
 ------
 
@@ -101,9 +98,9 @@ gulp shipit -e production
 
 #### options.tasks
 
-`@param {string|string[]} [options.tasks='deploy']`
+`@param {string[]} [options.tasks=['deploy']]`
 
-> A string or array of strings of shipit tasks to run. If not set, `deploy` is assumed.
+> An array of strings of shipit tasks to run. If not set, `['deploy']` is assumed.
 
 > Users may set `options.tasks` manually, or by passing the `-t` or `--tasks` argument via the CLI. If set via CLI, comma-separate multiple tasks names.
 
@@ -125,11 +122,7 @@ gulp shipit --tasks deploy,myOtherTask
 
 #### options.logItems
 
-> Items to be logged to console just before confirmation prompt. Intended to be used as a quick review of task details.
-
 `{function} [options.logItems(options, shipit)]`
-
-![logItems example](docs/demo-log.png)
 
 ##### Gulp example:
 
@@ -163,7 +156,7 @@ You **do not** need to call `shipit.initConfig`. It will be called automatically
 
 ```js
 var options = {
-  init: function(gshipit) {
+  init: function(options, shipit) {
     require('shipit-deploy')(shipit);
     require('shipit-shared')(shipit);
   }
