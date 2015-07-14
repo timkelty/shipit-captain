@@ -6,7 +6,7 @@
 ## Why?
 Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into an existing task workflow, using Gulp, Grunt, or anything else.
 
-Using shipit-captain will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
+Using `shipit-captain` will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
 
 ## Install
 
@@ -16,7 +16,7 @@ $ npm install --save shipit-captain
 
 ## Usage
 
-You can organize your config files any way you like. Below is my preference, as it still allows shipit-cli commands to work, as well as shipit-captain. The only requirment is you must separate your `shipit.config` exports.
+You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as those intended for `shipit-captain`. The only requirement is you must separate your `shipit.config` exports.
 
 ### Example `shipitfile.js`
 ```js
