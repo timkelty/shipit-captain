@@ -4,7 +4,7 @@
 ![shipit-captain demo](docs/demo.gif)
 
 ## Why?
-Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into our existing task workflow, be it Gulp, Grunt, or anything else.
+Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into an existing task workflow, using Gulp, Grunt, or anything else.
 
 Using shipit-captain will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
 
