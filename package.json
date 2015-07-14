@@ -1,6 +1,6 @@
 {
   "name": "shipit-captain",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Shipit task running wrapper",
   "main": "index.js",
   "repository": "timkelty/shipit-captain",
