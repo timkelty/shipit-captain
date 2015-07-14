@@ -96,18 +96,18 @@ gulp shipit -e production
 
 ------
 
-#### options.tasks
+#### options.run
 
-`@param {string[]} [options.tasks=['deploy']]`
+`@param {string|string[]} [options.run=['deploy']]`
 
-> An array of strings of shipit tasks to run. If not set, `['deploy']` is assumed.
+> An string or array of strings of shipit tasks to run. If not set, `['deploy']` is assumed.
 
-> Users may set `options.tasks` manually, or by passing the `-t` or `--tasks` argument via the CLI. If set via CLI, comma-separate multiple tasks names.
+> Users may set `options.run` manually, or by passing the `-r` or `--run` argument via the CLI. If set via CLI, comma-separate multiple tasks names.
 
 ##### Gulp example:
 
 ```bash
-gulp shipit --tasks deploy,myOtherTask
+gulp shipit --run deploy,myOtherTask
 ```
 
 ------

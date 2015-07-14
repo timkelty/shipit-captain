@@ -11,8 +11,8 @@ function captain(shipitConfig, options, cb) {
     'e': {
       alias: 'env'
     },
-    't': {
-      alias: 'tasks'
+    'r': {
+      alias: 'run'
     }
   }).argv;
 
@@ -24,13 +24,15 @@ function captain(shipitConfig, options, cb) {
   }
 
   // Normalize tasks from argv
-  var argvTasks = argv['tasks'] || 'deploy';
-  argvTasks = argvTasks.split(',').map(Function.prototype.call, String.prototype.trim);
+  var argvRun = argv['run'];
+  argvRun = argvRun ?
+    argvRun.split(',').map(Function.prototype.call, String.prototype.trim) :
+    false;
 
   options = _.defaults(options || {}, {
     targetEnv: argv['env'] || false,
     availableEnvs: _.without(Object.keys(shipitConfig), 'default'),
-    tasks: argvTasks,
+    tasks: argvRun || ['deploy'],
     logItems: function(options, shipit) {
       return {
         'Environment': options.targetEnv,
@@ -42,6 +44,8 @@ function captain(shipitConfig, options, cb) {
       require('shipit-deploy')(shipit);
     }
   });
+
+  options.run = Array.isArray(options.run) ? options.run : [options.run];
 
   var confirmPrompt = function confirmPrompt(options, shipit) {
     if (options.logItems) {
