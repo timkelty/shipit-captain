@@ -50,8 +50,9 @@ module.exports.init = function(shipit) {
 
 ### Example `gulpfile.js`
 ```js
-var gulp   = require('gulp');
+var gulp = require('gulp');
 var shipitCaptain = require('shipit-captain');
+var shipitConfig = require('./config/shipit').config;
 
 // With no options, will run shipit-deploy task by default.
 gulp.task('shipit', function(cb) {
