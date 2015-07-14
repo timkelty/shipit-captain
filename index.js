@@ -32,7 +32,7 @@ function captain(shipitConfig, options, cb) {
   options = _.defaults(options || {}, {
     targetEnv: argv['env'] || false,
     availableEnvs: _.without(Object.keys(shipitConfig), 'default'),
-    tasks: argvRun || ['deploy'],
+    run: argvRun || [],
     logItems: function(options, shipit) {
       return {
         'Environment': options.targetEnv,
