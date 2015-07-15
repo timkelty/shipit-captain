@@ -17,7 +17,7 @@ $ npm install --save shipit-captain
 
 ## Usage
 
-You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as shipit-captain. The only requirment is you must separate your `shipit.config` exports.
+You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as those intended for `shipit-captain`. The only requirment is you must separate your `shipit.config` exports.
 
 ### Example `shipitfile.js`
 ```js
@@ -51,7 +51,7 @@ module.exports.init = function(shipit) {
 
 ### Example `gulpfile.js`
 ```js
-var gulp   = require('gulp');
+var gulp = require('gulp');
 var shipitCaptain = require('shipit-captain');
 
 // With no options, will run shipit-deploy task by default.
@@ -153,7 +153,7 @@ gulp.task('shipit', function(cb) {
 
 Require Shipit plugins or anything else you would have in your [`shipitfile`](https://github.com/shipitjs/shipit#example-shipitfilejs).
 
-You **do not** need to call `shipit.initConfig`. It will be called automatically if it has not been called.
+`shipit.initConfig` will be called automatically if it has not been called.
 
 ##### Gulp example:
 
