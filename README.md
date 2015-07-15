@@ -100,7 +100,7 @@ gulp shipit -e production
 
 `@param {string|string[]} [options.run=['deploy']]`
 
-> An string or array of strings of shipit tasks to run. If not set, `['deploy']` is assumed.
+> An string or array of strings of shipit tasks to run. If not set, user will be prompted for a task to run from all available tasks.
 
 > Users may set `options.run` manually, or by passing the `-r` or `--run` argument via the CLI. If set via CLI, comma-separate multiple tasks names.
 
