@@ -147,13 +147,13 @@ gulp.task('shipit', function(cb) {
 
 ------
 
-#### options.init
+#### options.initg
 
 `{function} [options.init(shipit)]`
 
 Require Shipit plugins or anything else you would have in your [`shipitfile`](https://github.com/shipitjs/shipit#example-shipitfilejs).
 
-`shipit.initConfig` will be called automatically if it has not been called.
+`shipit.initConfig` will be called automatically if it has not already been called.
 
 ##### Gulp example:
 
