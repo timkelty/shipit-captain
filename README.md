@@ -1,10 +1,13 @@
 # shipit-captain 
-> Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguements](https://github.com/bcoe/yargs), customized logging, and more.
+
+> Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguments](https://github.com/bcoe/yargs), customized logging, and more.
+
+![shipit-captain demo](docs/demo.gif)
 
 ## Why?
 Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into our existing task workflow, be it Gulp, Grunt, or anything else.
 
-Using shipit-captain will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
+`shipit-captain` will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
 
 ## Install
 
@@ -14,7 +17,7 @@ $ npm install --save shipit-captain
 
 ## Usage
 
-You can organize your config files any way you like. Below is my preference, as it still allows shipit-cli commands to work, as well as shipit-captain. The only requirment is you must separate your `shipit.config` exports.
+You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as shipit-captain. The only requirment is you must separate your `shipit.config` exports.
 
 ### Example `shipitfile.js`
 ```js
@@ -40,7 +43,7 @@ var config: {
   }
 };
 module.exports.config = config;
-module.exports.initConfig = function(shipit) {
+module.exports.init = function(shipit) {
   require('shipit-shared')(shipit);
   shipit.initConfig(config);
 }
