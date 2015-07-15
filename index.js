@@ -5,7 +5,7 @@ var chalk = require('chalk');
 var util = require('util');
 var yargs = require('yargs');
 
-function captain(shipitConfig, options, cb) {
+var captain = function captain(shipitConfig, options, cb) {
   var shipit;
   var argv = yargs.options({
     'e': {
@@ -18,19 +18,20 @@ function captain(shipitConfig, options, cb) {
 
   // Optional args
   cb = _.isFunction(cb) ? cb : function() {};
+
   if (_.isFunction(options)) {
     cb = options;
     options = {};
   }
 
   // Normalize tasks from argv
-  var argvRun = argv['run'];
+  var argvRun = argv.run;
   argvRun = argvRun ?
     argvRun.split(',').map(Function.prototype.call, String.prototype.trim) :
     false;
 
   options = _.defaults(options || {}, {
-    targetEnv: argv['env'] || false,
+    targetEnv: argv.env || false,
     availableEnvs: _.without(Object.keys(shipitConfig), 'default'),
     run: argvRun || [],
     logItems: function(options, shipit) {
@@ -47,7 +48,25 @@ function captain(shipitConfig, options, cb) {
 
   options.run = Array.isArray(options.run) ? options.run : [options.run];
 
-  var confirmPrompt = function confirmPrompt(options, shipit) {
+  var taskPrompt = function tasksPrompt() {
+    if (!options.run.length) {
+      return inquirer.prompt([{
+        type: 'list',
+        name: 'run',
+        default: 'deploy',
+        message: 'Run task:',
+        choices: _.pluck(shipit.tasks, 'name')
+      }]).then(function(answers) {
+        options.run = [answers.run];
+
+        return Promise.resolve([options.run]);
+      });
+    }
+
+    return Promise.resolve(options.run);
+  };
+
+  var confirmPrompt = function confirmPrompt() {
     if (options.logItems) {
       var logItems = options.logItems(options, shipit);
       var msg = Object.keys(logItems).map(function(key) {
@@ -56,13 +75,14 @@ function captain(shipitConfig, options, cb) {
 
       console.log('\n' + msg.join('\n') + '\n');
     }
-    var taskStr = chalk.cyan(options.tasks.join(chalk.white(', ')));
+
+    var taskStr = chalk.cyan(options.run.join(chalk.white(', ')));
 
     return inquirer.prompt([{
       type: 'confirm',
       name: 'taskConfirm',
       default: true,
-      message: util.format('Proceed with tasks [%s]', taskStr),
+      message: util.format('Run tasks [%s]', taskStr),
     }]).then(function(answers) {
 
       return new Promise(function(resolve, reject) {
@@ -75,7 +95,7 @@ function captain(shipitConfig, options, cb) {
     });
   };
 
-  var envPrompt = function envPrompt(options) {
+  var envPrompt = function envPrompt() {
     if (!options.targetEnv && options.availableEnvs.length > 1) {
       return inquirer.prompt([{
         type: 'list',
@@ -83,15 +103,19 @@ function captain(shipitConfig, options, cb) {
         default: options.targetEnv,
         message: 'Target environment:',
         choices: options.availableEnvs
-      }])
+      }].then(function(answers) {
+        options.targetEnv = answers.targetEnv;
+
+        return options.targetEnv;
+      }));
     }
 
-    return Promise.resolve({targetEnv: options.targetEnv || options.availableEnvs[0]});
+    options.targetEnv = options.targetEnv || options.availableEnvs[0];
+
+    return Promise.resolve(options.targetEnv);
   };
 
-  return envPrompt(options)
-  .then(function(answers) {
-    options.targetEnv = answers.targetEnv;
+  var initShipit = function initShipit() {
     shipit = new Shipit({environment: options.targetEnv});
 
     if (_.isFunction(options.init)) {
@@ -101,15 +125,23 @@ function captain(shipitConfig, options, cb) {
         shipit.initConfig(shipitConfig);
       }
     }
+  };
 
-    return confirmPrompt(options, shipit);
-  }).then(function(shipit) {
+  var startShipit = function startShipit() {
     shipit.initialize();
-    shipit.start(options.tasks, function() {
+    return shipit.start(options.run, function() {
       cb();
+
       return Promise.resolve(shipit);
     });
-  }).catch(function(e) {
+  };
+
+  return envPrompt()
+  .then(initShipit)
+  .then(taskPrompt)
+  .then(confirmPrompt)
+  .then(startShipit)
+  .catch(function(e) {
     console.log(chalk.red(e));
   });
 }
