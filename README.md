@@ -18,7 +18,7 @@ $ npm install --save shipit-captain
 ## Usage
 
 You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as those intended for `shipit-captain`. The only requirment is you must separate your `shipit.config` exports.
-
+tas
 ### Example `shipitfile.js`
 ```js
 module.exports = require('./config/shipit').init;
@@ -68,7 +68,7 @@ gulp.task('myTask', ['shipit'], function(cb) {
 // Pass options 
 var options = {
   init: require('config/shipit').init,
-  tasks: ['deploy', 'clean'],
+  run: ['deploy', 'clean'],
   targetEnv: 'staging',
 }
 
@@ -101,7 +101,7 @@ gulp shipit -e production
 
 #### options.run
 
-`@param {string|string[]} [options.run=['deploy']]`
+`@param {string|string[]} [options.run=[]]`
 
 > An string or array of strings of Shipit tasks to run. If not set, user will be prompted for a task to run from all available tasks.
 
