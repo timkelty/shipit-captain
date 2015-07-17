@@ -1,6 +1,6 @@
 # shipit-captain 
 
-> Invoke [Shipit](https://github.com/shipitjs/shipit) and tasks on your own terms, without `shipit-cli`. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguments](https://github.com/bcoe/yargs), customized logging, and more.
+> Invoke [Shipit](https://github.com/shipitjs/shipit) and run tasks from Gulp, or any task runner. Includes [Inquirer.js](https://github.com/SBoudrias/Inquirer.js) prompts, [CLI arguments](https://github.com/bcoe/yargs), customized logging, and more.
 
 ![shipit-captain demo](docs/demo.gif)
 
