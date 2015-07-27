@@ -4,6 +4,7 @@ var inquirer = require('bluebird-inquirer');
 var chalk = require('chalk');
 var util = require('util');
 var yargs = require('yargs');
+var Promise = require('bluebird');
 
 var captain = function captain(shipitConfig, options, cb) {
   var shipit;
