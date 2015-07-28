@@ -123,6 +123,14 @@ gulp shipit --run deploy,myOtherTask
 
 ------
 
+#### options.availableEnvs
+
+`{boolean} [options.skipConfirm]`
+ 
+> set skipConfirm to true to bypass the deployment confirmation prompt
+
+------
+
 #### options.logItems
 
 `{function} [options.logItems(options, shipit)]`

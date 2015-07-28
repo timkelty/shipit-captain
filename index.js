@@ -79,21 +79,27 @@ var captain = function captain(shipitConfig, options, cb) {
 
     var taskStr = chalk.cyan(options.run.join(chalk.white(', ')));
 
-    return inquirer.prompt([{
-      type: 'confirm',
-      name: 'taskConfirm',
-      default: true,
-      message: util.format('Run tasks [%s]', taskStr),
-    }]).then(function(answers) {
-
-      return new Promise(function(resolve, reject) {
-        if (answers.taskConfirm) {
-          return resolve(shipit);
-        }
-
-        return reject('Shipit process aborted.');
+    if ( options.skipConfirm ) {
+      return new Promise(function(resolve) {
+        return resolve(shipit);
       });
-    });
+    } else {
+      return inquirer.prompt([{
+        type: 'confirm',
+        name: 'taskConfirm',
+        default: true,
+        message: util.format('Run tasks [%s]', taskStr),
+      }]).then(function(answers) {
+
+        return new Promise(function(resolve, reject) {
+          if (answers.taskConfirm) {
+            return resolve(shipit);
+          }
+
+          return reject('Shipit process aborted.');
+        });
+      });
+    }
   };
 
   var envPrompt = function envPrompt() {
