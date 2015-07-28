@@ -123,7 +123,7 @@ gulp shipit --run deploy,myOtherTask
 
 ------
 
-#### options.availableEnvs
+#### options.skipConfirm
 
 `{boolean} [options.skipConfirm]`
  
