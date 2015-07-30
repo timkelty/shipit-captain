@@ -117,17 +117,17 @@ gulp shipit --run deploy,myOtherTask
 
 #### options.availableEnvs
 
-`{string[]} [options.availableEnvs]`
+`@param {string[]} [options.availableEnvs]`
  
 > By default this will be set to any environments defined in `shipitConfig`. This shouldn't normally need to be set.
 
 ------
 
-#### options.skipConfirm
+#### options.confirm
 
-`{boolean} [options.skipConfirm]`
+`@param {boolean} [options.confirm=true]`
  
-> set skipConfirm to true to bypass the deployment confirmation prompt
+> Set to `false` to bypass the confirmation prompt.
 
 ------
 

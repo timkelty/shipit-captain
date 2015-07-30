@@ -35,6 +35,7 @@ var captain = function captain(shipitConfig, options, cb) {
     targetEnv: argv.env || false,
     availableEnvs: _.without(Object.keys(shipitConfig), 'default'),
     run: argvRun || [],
+    confirm: true,
     logItems: function(options, shipit) {
       return {
         'Environment': options.targetEnv,
@@ -79,11 +80,7 @@ var captain = function captain(shipitConfig, options, cb) {
 
     var taskStr = chalk.cyan(options.run.join(chalk.white(', ')));
 
-    if ( options.skipConfirm ) {
-      return new Promise(function(resolve) {
-        return resolve(shipit);
-      });
-    } else {
+    if ( options.confirm ) {
       return inquirer.prompt([{
         type: 'confirm',
         name: 'taskConfirm',
@@ -100,6 +97,8 @@ var captain = function captain(shipitConfig, options, cb) {
         });
       });
     }
+
+    return Promise.resolve(shipit);
   };
 
   var envPrompt = function envPrompt() {
