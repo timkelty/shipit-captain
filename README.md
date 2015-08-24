@@ -5,7 +5,7 @@
 ![shipit-captain demo](docs/demo.gif)
 
 ## Why?
-Shipit comes with it's own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into our existing task workflow, be it Gulp, Grunt, or anything else.
+Shipit comes with its own [CLI](https://github.com/shipitjs/shipit#launch-command), but I wanted to integrate Shipit tasks into our existing task workflow, be it Gulp, Grunt, or anything else.
 
 `shipit-captain` will let you easily do things like [set default environments](https://github.com/shipitjs/shipit/issues/38), log confirmation prompts, and easily integrate into Gulp tasks.
 
@@ -17,8 +17,8 @@ $ npm install --save shipit-captain
 
 ## Usage
 
-You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as those intended for `shipit-captain`. The only requirment is you must separate your `shipit.config` exports.
-tas
+You can organize your config files any way you like. Below is my preference, as it still allows `shipit-cli` commands to work, as well as those intended for `shipit-captain`. The only requirement is you must separate your `shipit.config` exports.
+
 ### Example `shipitfile.js`
 ```js
 module.exports = require('./config/shipit').init;
@@ -103,7 +103,7 @@ gulp shipit -e production
 
 `@param {string|string[]} [options.run=[]]`
 
-> An string or array of strings of Shipit tasks to run. If not set, user will be prompted for a task to run from all available tasks.
+> A string or array of strings of Shipit tasks to run. If not set, user will be prompted for a task to run from all available tasks.
 
 > Users may set `options.run` manually, or by passing the `-r` or `--run` argument via the CLI. If set via CLI, comma-separate multiple tasks names.
 
@@ -161,7 +161,7 @@ gulp.task('shipit', function(cb) {
 
 Require Shipit plugins or anything else you would have in your [`shipitfile`](https://github.com/shipitjs/shipit#example-shipitfilejs).
 
-`shipit.initConfig` will be called automatically if it has not already gbeen called.
+`shipit.initConfig` will be called automatically if it has not already been called.
 
 ##### Gulp example:
 
