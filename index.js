@@ -109,11 +109,11 @@ var captain = function captain(shipitConfig, options, cb) {
         default: options.targetEnv,
         message: 'Target environment:',
         choices: options.availableEnvs
-      }].then(function(answers) {
+      }]).then(function(answers) {
         options.targetEnv = answers.targetEnv;
 
         return options.targetEnv;
-      }));
+      });
     }
 
     options.targetEnv = options.targetEnv || options.availableEnvs[0];
@@ -150,6 +150,6 @@ var captain = function captain(shipitConfig, options, cb) {
   .catch(function(e) {
     console.log(chalk.red(e));
   });
-}
+};
 
 module.exports = captain;
