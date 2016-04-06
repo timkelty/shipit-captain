@@ -27,7 +27,7 @@ module.exports = require('./config/shipit').init;
 ### Example `config/shipit.js`
 
 ```js
-var config: {
+var config = {
   default: {
     workspace: '/tmp/github-monitor',
     deployTo: '/tmp/deploy_to',
