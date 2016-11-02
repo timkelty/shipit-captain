@@ -135,8 +135,8 @@ var captain = function captain(shipitConfig, options, cb) {
 
   var startShipit = function startShipit() {
     shipit.initialize();
-    return shipit.start(options.run, function() {
-      cb();
+    return shipit.start(options.run, function(e) {
+      cb(e);
 
       return Promise.resolve(shipit);
     });
